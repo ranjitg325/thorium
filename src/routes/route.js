@@ -1,20 +1,20 @@
 const express = require('express');
 const router = express.Router();
 //Q.1)saves a player’s details and doesn’t allow saving the data of a player with a name that already exists in the data) 23feb
-// let players=[];
-// router.post('/players', function(req, res) {
-//     let player = req.body;
-//     let playerName = players.name;
-//     for(let i = 0;i < players.length; i++){
-//         if(players[i].name == playerName){
-//              res.send ("player already exists");
-//         }
-//     }
-//     players.push(player);
-//     console.log("Player array",players);
-//     res.send(players);
+let players=[];
+router.post('/players', function(req, res) {
+    let player = req.body;
+    let playerName = players.name;
+    for(let i = 0;i < players.length; i++){
+        if(players[i].name == playerName){
+             res.send ("player already exists");
+        }
+    }
+    players.push(player);
+    console.log("Player array",players);
+    res.send(players);
     
-// });
+});
 
 //Q.2)Write an api that books a slot for a player with relevant details. The api looks like POST
 router.post('/players/:playerName/bookings/:bookingId', function(req, res) {
