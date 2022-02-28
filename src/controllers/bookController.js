@@ -21,17 +21,17 @@ const booksYear= async function (req, res) {
 }
 
 
-// const getPaticularBooks= async function (req, res) {
-//     let name=req.query.name
-//     let year=req.query.year
-//     let aname=req.query.aname
-//     let totalpage=req.query.totalpage
+const getPaticularBooks= async function (req, res) {
+    let name=req.query.name
+    let year=req.query.year
+    let aname=req.query.aname
+    let totalpage=req.query.totalpage
 
-//     let allUsers= await BookModel.find({
-//         $or:[{authorName:{$eq:aname}},{year:{$eq:year}},{bookName:{$eq:name}},{totalPages:{$eq:totalpage}}]
-//     }).select()
-//     res.send({msg: allUsers})
-// }
+    let allUsers= await BookModel.find({
+        $or:[{authorName:{$eq:aname}},{year:{$eq:year}},{bookName:{$eq:name}},{totalPages:{$eq:totalpage}}]
+    }).select()
+    res.send({msg: allUsers})
+}
 
 
 const getInrBooks= async function (req, res) {
@@ -56,6 +56,6 @@ const getRandomBooks= async function (req, res) {
 module.exports.createBook= createBook
 module.exports.getBookList= getBookList
 module.exports.booksYear=booksYear
-// module.exports.getPaticularBooks=getPaticularBooks
+module.exports.getPaticularBooks=getPaticularBooks
 module.exports.getInrBooks=getInrBooks
 module.exports.getRandomBooks=getRandomBooks

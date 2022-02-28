@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-// const UserController= require("../controllers/userController")
+const UserController= require("../controllers/userController")
 const BookController= require("../controllers/bookController")
 
 router.get("/test-me", function (req, res) {
@@ -16,7 +16,7 @@ router.get("/bookList", BookController.getBookList)
 
 router.post("/booksInYear",BookController.booksYear)
 
-// router.get("/paticularBooks",BookController.getPaticularBooks)
+router.get("/paticularBooks",BookController.getPaticularBooks)
 
 router.get("/INRBooks", BookController.getInrBooks)
 
