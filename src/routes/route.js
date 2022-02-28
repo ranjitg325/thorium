@@ -1,51 +1,19 @@
 const express = require('express');
 const router = express.Router();
+const userSchema= require("../models/userSchema.js")
 
-let persons= [
-   {
-   name: "PK",
-   age: 10,
-   votingStatus: false
-  },
-  {
-   name: "SK",
-   age: 20,
-   votingStatus: false
-  },
-  {
-   name: "AA",
-   age: 70,
-   votingStatus: false
-  },
-  {
-   name: "SC",
-   age: 5,
-   votingStatus: false
-  },
-  {
-   name: "HO",
-   age: 40,
-   votingStatus: false
-  }
-  ]
-
-  let eligible=[]
-
- router.get("/query2",function(req,res){
-   let person = req.query.votingage
-  
-   for (let i=0;i<persons.length;i++){
-     if(persons[i].age>=person){
-        persons[i].votingStatus=true
-        eligible.push(persons[i])
-
-     }
-   }
-   res.send({result:eligible,status:true})
-   console.log(eligible)
- })  
+const UserController= require("../controllers/userController.js")
 
 router.get('/test-me', function (req, res) {
     res.send('Welcome to my api')
 });
+
+router.post('/createBook', UserController.createBook)
+// router.post('/createBook', async function(req,res){
+//   let value = req.body
+//   let savedValue= await userSchema.create(value)
+//   res.send({msg:savedValue})
+// })
+router.get('/bookList', UserController.bookList);
+
 module.exports = router;
