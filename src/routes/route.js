@@ -1,51 +1,24 @@
 const express = require('express');
 const router = express.Router();
+const bookModels= require("../models/bookModel.js")
 
-let persons= [
-   {
-   name: "PK",
-   age: 10,
-   votingStatus: false
-  },
-  {
-   name: "SK",
-   age: 20,
-   votingStatus: false
-  },
-  {
-   name: "AA",
-   age: 70,
-   votingStatus: false
-  },
-  {
-   name: "SC",
-   age: 5,
-   votingStatus: false
-  },
-  {
-   name: "HO",
-   age: 40,
-   votingStatus: false
-  }
-  ]
-
-  let eligible=[]
-
- router.get("/query2",function(req,res){
-   let person = req.query.votingage
-  
-   for (let i=0;i<persons.length;i++){
-     if(persons[i].age>=person){
-        persons[i].votingStatus=true
-        eligible.push(persons[i])
-
-     }
-   }
-   res.send({result:eligible,status:true})
-   console.log(eligible)
- })  
+const bookController= require("../controllers/bookController.js")
 
 router.get('/test-me', function (req, res) {
     res.send('Welcome to my api')
 });
+
+router.post("/createBook", bookController.createBook  )
+
+router.get("/bookList", bookController.getBookList)
+
+router.post("/booksInYear",bookController.booksYear)
+
+router.get("/paticularBooks",bookController.getPaticularBooks)
+
+router.get("/INRBooks", bookController.getInrBooks)
+
+router.get("/randomBooks",bookController.getRandomBooks)
+
+
 module.exports = router;
