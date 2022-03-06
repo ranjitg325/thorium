@@ -1,51 +1,17 @@
+
 const express = require('express');
 const router = express.Router();
+// const UserModel= require("../models/userModel.js")
+const Controller = require ('../controller/userController')
 
-let persons= [
-   {
-   name: "PK",
-   age: 10,
-   votingStatus: false
-  },
-  {
-   name: "SK",
-   age: 20,
-   votingStatus: false
-  },
-  {
-   name: "AA",
-   age: 70,
-   votingStatus: false
-  },
-  {
-   name: "SC",
-   age: 5,
-   votingStatus: false
-  },
-  {
-   name: "HO",
-   age: 40,
-   votingStatus: false
-  }
-  ]
+// router.get("/test-me", function (req, res) {
+    // res.send("My first ever api!")
+// })
 
-  let eligible=[]
 
- router.get("/query2",function(req,res){
-   let person = req.query.votingage
-  
-   for (let i=0;i<persons.length;i++){
-     if(persons[i].age>=person){
-        persons[i].votingStatus=true
-        eligible.push(persons[i])
+router.get("/api1", Controller.firstApi)
+router.get("/api2", Controller.secondApi)
+router.get("/api3", Controller.thirdApi)
+router.get("/api4", Controller.fourthApi)
 
-     }
-   }
-   res.send({result:eligible,status:true})
-   console.log(eligible)
- })  
-
-router.get('/test-me', function (req, res) {
-    res.send('Welcome to my api')
-});
 module.exports = router;
