@@ -1,23 +1,34 @@
 const jwt = require("jsonwebtoken");
 const userModel = require("../models/userModel");
 
-const createUser = async function (abcd, xyz) {
-  //You can name the req, res objects anything.
-  //but the first parameter is always the request 
-  //the second parameter is always the response
-  let data = abcd.body;
-  let savedData = await userModel.create(data);
-  console.log(abcd.newAtribute);
-  xyz.send({ msg: savedData });
+const createUser = async function (req, res) {
+  try {
+    //You can name the req, res objects anything.
+    //but the first parameter is always the request 
+    //the second parameter is always the response
+    let data = req.body;
+    console.log(data)
+    if (Object.keys(data).length != 0) {
+      let savedData = await userModel.create(data);
+      res.status(201).send({ msg: savedData });
+    }
+    else {
+      res.status(400).send({ msg: "BAD REQUEST" })
+    }
+  } catch (err) {
+    console.log("This is the error", err.message)
+    res.status(500).send({ msg: "Error", error: err.message });
+  }
 };
 
 const loginUser = async function (req, res) {
+  try{
   let userName = req.body.emailId;
   let password = req.body.password;
 
   let user = await userModel.findOne({ emailId: userName, password: password });
   if (!user)
-    return res.send({
+    return res.status(401).send({
       status: false,
       msg: "username or the password is not corerct",
     });
@@ -34,13 +45,18 @@ const loginUser = async function (req, res) {
       batch: "thorium",
       organisation: "FUnctionUp",
     },
-    "functionup-thorium"
+    "rjranjit"
   );
   res.setHeader("x-auth-token", token);
-  res.send({ status: true, data: token });
+  res.status(202).send({ status: true, data: token });
+  }catch (err) {
+    console.log("This is the error", err.message)
+    res.status(500).send({ msg: "Error", error:"unexpected condition" });
+  }
 };
 
 const getUserData = async function (req, res) {
+  try{
   let token = req.headers["x-Auth-token"];
   if (!token) token = req.headers["x-auth-token"];
 
@@ -61,10 +77,15 @@ const getUserData = async function (req, res) {
   let userId = req.params.userId;
   let userDetails = await userModel.findById(userId);
   if (!userDetails)
-    return res.send({ status: false, msg: "No such user exists" });
+    return res.status(400).send({ status: false, msg: "No such user exists" });
 
-  res.send({ status: true, data: userDetails });
+  res.status(202).send({ status: true, data: userDetails });
+} catch(err){
+  console.log("This is the error", err.message)
+  res.status(500).send({ msg: "Error", error:"unexpected condition" });
+}
 };
+
 
 const updateUser = async function (req, res) {
 // Do the same steps here:
@@ -120,7 +141,7 @@ const deleteUser = async function(req,res){
   let User = await userModel.findById(userId);
 
   if(!User) return res.send({status:false , msg: "No such user"})
-  let deleteUser = await userModel.findByIdAndUpdate({_id: userId}, {$set:{isDeleted: true}},{new:true})
+  let deleteUser = await userModel.findByIdAndUpdate({_id: userId,isDeleted:false}, {$set:{isDeleted: true}},{new:true})
   res.send({status:true , msg: deleteUser})
 }
 module.exports.createUser = createUser;
