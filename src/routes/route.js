@@ -12,7 +12,8 @@ router.get("/test-me", function (req, res) {
 
 // S3 and cloud storage 
 // step 1: multer will be used as usual to get access to the file in nodejs( from previous session learnings)
-// step 2(BEST PRACTICE): always write s2 uploadFile function seperately- in a seperate file/function..expect it to take file as input and return the url of the uploaded file as output
+// step 2(BEST PRACTICE): always write s3 uploadFile function seperately- in a seperate file/function..
+//expect it to take file as input and return the url of the uploaded file as output
 // step 3: aws-sdk install - as package
 // step 4: Setup config for aws authentication- use code below as plugin keys that are given to you
 // step 5: build the uploadFile function for uploading file - use the code below and edit what is marked HERE only
@@ -24,41 +25,39 @@ router.get("/test-me", function (req, res) {
 aws.config.update(
     {
         accessKeyId: "AKIAY3L35MCRVFM24Q7U",
-        secretAccessKeyId: "qGG1HE0qRixcW1T1Wg1bv+08tQrIkFVyDFqSft4J",
+        secretAccessKey: "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",
         region: "ap-south-1"
     }
 )
 
-let uploadFile = async (file) => {
-    return new Promise( function(resolve, reject) {
-        //this function will upload file to aws and return the link
-        let s3 = new aws.S3({ apiVersion: "2006-03-01" }) //we will be using s3 service of aws
-         await uploadFile(files[0])
+ let uploadFile = async (file) => {
+    return new Promise(async function(resolve, reject) {
+//         //this function will upload file to aws and return the link
+         let s3 = new aws.S3({ apiVersion: "2006-03-01" }) //we will be using s3 service of aws
+          //await uploadFile(files[0])
         var uploadParams = {
             ACL: "public-read",
             Bucket: "classroom-training-bucket", // HERE
-            Key: "radhika/" + file.originalname, // HERE "radhika/smiley.jpg"
+            Key: "rj/" + file.originalname, // HERE "radhika/smiley.jpg"
             Body: file.buffer
         }
 
       s3.upload(uploadParams, function (err, data) {
-            if (err) { 
-                return reject({ "error": err }) 
-            }
-
-            console.log(data)
+             if (err) { return reject({ "error": err })  }
+                 
+             console.log(data)
             console.log(" file uploaded succesfully ")
             return resolve(data.Location) // HERE
-          }
+         }
         )
 
-    // let data= await s3.upload(uploadParams)
+    //  let data= await s3.upload(uploadParams)
     // if (data) return data.Location
-    // else return "there is an error"
+    //  else return "there is an error"
 
     }
     )
-}
+  }
 
 router.post("/write-file-aws", async function (req, res) {
     try {
@@ -66,15 +65,15 @@ router.post("/write-file-aws", async function (req, res) {
         if (files && files.length > 0) {
             //upload to s3 and get the uploaded link
             // res.send the link back to frontend/postman
-            let uploadedFileURL = await uploadFile(files[0])
-            res.status(201).send({ msg: "file uploaded succesfully", data: uploadedFileURL })
+            let URL = await uploadFile(files[0])
+            res.status(201).send({ status : true, msg: " file uploaded succesfully", data: URL })
         }
         else {
             res.status(400).send({ msg: "No file found" })
         }
     }
     catch (err) {
-        res.status(500).send({ msg: err })
+        res.status(500).send({ msg: err.message })
     }
 }
 )
